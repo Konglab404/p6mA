@@ -35,12 +35,12 @@ p6mA is a N^6-methyladenine predictor which is trained by multiple species' data
 
 These R packages should be pre-installed:
 
-magrittr
-stringr
-Biostrings
-xgboost
+    magrittr
+    stringr
+    Biostrings
+    xgboost
 
-RTFE(installed by devtools' install.github() function from 'https://github.com/ritianjiang/RTFE')
+    RTFE(installed by devtools' install.github() function from 'https://github.com/ritianjiang/RTFE')
 
 Please put the p6mA.R script and Models folder in the same path, like:
 
