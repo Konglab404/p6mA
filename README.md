@@ -44,13 +44,10 @@ These R packages should be pre-installed:
 
 Please put the p6mA.R script and Models folder in the same path, like:
 
-~\Software\
-
-          \p6mA\
-          
-               \p6mA.R
-               
-               \Models
+    ~\Software\
+              \p6mA\
+                   \p6mA.R
+                   \Models
 
 The input file should be DNA FASTA format file, Each nucleotide should be one of in ('A', 'T', 'G', 'C'), 'N' is not permitted and it will cause error.
 
