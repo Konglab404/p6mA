@@ -13,7 +13,12 @@ Before using p6mA, some R packages should be installed in R environment.
         install.packages("BiocManager")
         BiocManager::install("Biostrings")
         devtools::install_github("ritianjiang/RTFE")
+        
+After installing these packages, you can clone p6mA by:
 
+        ###bash
+        git clone git@github.com:Konglab404/p6mA.git
+        cd ./p6mA
 
 ## Quick USAGE: 
 Rscript p6mA.R \[MODE\] \[INPUT FASTA FILE\] \[OUTPUT FILE NAME\] \[CUTOFF\]
