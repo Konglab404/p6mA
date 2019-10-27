@@ -4,7 +4,7 @@
 ##        INPUT FASTA FILE: The input .fasta file. The sequences should be 41-bp and the A in 21st base
 ##        OUTPUT FILE NAME: The output file name. Default: Output.result
 ##
-##        Attention: If you want to modify CUTOFF, please set the OUTPUT FILE NAME
+##       
 ####################################################################
 
 #Obtain the parameters.
