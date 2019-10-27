@@ -1,20 +1,33 @@
 # p6mA
+We recommend to use it in linux platform.
+
+## Pre-install
+The R language should be installed. The version we used is R 3.6.1
+
+Before using p6mA, some R packages should be installed in R environment.
+
+        install.packages("xgboost")
+        install.packages("devtools")
+        install.packages("magrittr")
+        install.packages("stringr")
+        install.packages("BiocManager")
+        BiocManager::install("Biostrings")
+        devtools::install_github("ritianjiang/RTFE")
+
+
 ## Quick USAGE: 
 Rscript p6mA.R \[MODE\] \[INPUT FASTA FILE\] \[OUTPUT FILE NAME\] \[CUTOFF\]
-
-        MODE            : The model to test the input sequences; one of "Rice", "Fly", "Worm", "Human", "Compre", "Compre2"
-        
+     
         INPUT FASTA FILE: The input .fasta file. The sequences should be 41-bp and the A in 21st base
         
         OUTPUT FILE NAME: The output file name. Default: Output.result
         
-        CUTOFF          : The cutoff of classifier. Sites whose prediction socre below it will be identified as non-6mA. Default: 0.5
 
         Attention: If you want to modify CUTOFF, please set the OUTPUT FILE NAME
 
 Example: 
 
-        Rscript p6mA.R Compre the/path/to/your/file.fasta test
+        Rscript p6mA.R ./test.fasta
 
 The input file should be in .fasta format, looks like:
 
@@ -47,7 +60,7 @@ Please put the p6mA.R script and Models folder in the same path, like:
     ~\Software\
               \p6mA\
                    \p6mA.R
-                   \Models
+                   \total_models
 
 The input file should be DNA FASTA format file, Each nucleotide should be one of in ('A', 'T', 'G', 'C'), 'N' is not permitted and it will cause error.
 
