@@ -1,10 +1,8 @@
 ##
-## USAGE: Rscript p6mA.R [MODE] [INPUT FASTA FILE] [OUTPUT FILE NAME] [CUTOFF]
+## USAGE: Rscript p6mA.R [INPUT FASTA FILE] [OUTPUT FILE NAME]
 ## 
-##        MODE            : The model to test the input sequences; one of "Rice", "Fly", "Worm", "Human", "Compre"
 ##        INPUT FASTA FILE: The input .fasta file. The sequences should be 41-bp and the A in 21st base
 ##        OUTPUT FILE NAME: The output file name. Default: Output.result
-##        CUTOFF          : The cutoff of classifier. Sites whose prediction socre below it will be identified as non-6mA. Default: 0.5
 ##
 ##        Attention: If you want to modify CUTOFF, please set the OUTPUT FILE NAME
 ####################################################################
@@ -12,13 +10,11 @@
 #Obtain the parameters.
 Args<-commandArgs(trailingOnly=T)
 if(length(Args) == 0){
-  cat("USAGE: Rscript p6mA.R [MODE] [INPUT FASTA FILE] [OUTPUT FILE NAME] [CUTOFF]");cat("\n");cat("\n")
-  cat("MODE            : The model to test the input sequences; one of Rice, Fly, Worm, Human, Compre.n");cat("\n")
+  cat("USAGE: Rscript p6mA.R [INPUT FASTA FILE] [OUTPUT FILE NAME]");cat("\n");cat("\n")
   cat("INPUT FASTA FILE: The input .fasta file. The sequences should be 41-bp and the A in 21st base");cat("\n")
   cat("OUTPUT FILE NAME: The output file name. Default: output.result");cat("\n")
-  cat("CUTOFF          : The cutoff of classifier. Sites whose prediction socre below it will be identified as non-6mA. Default: 0.5");cat("\n")
+  
   cat("\n");
-  cat("Attention: If you want to modify CUTOFF, please set the OUTPUT FILE NAME")
   stop("Please read the usage.",call.=F)
 }
 
@@ -53,50 +49,18 @@ PdsZ<-function(object,Z){
 cat("Runing");cat("\n")
 
 output<-"output.result"
-mode<-Args[1] %>% as.character; input<-Args[2] %>% as.character
-try(output<-Args[3] %>% as.character(),silent = T); 
-if(is.na(output)){output<-"output.result"}
+try(input<-Args[1] %>% as.character(),silent = T); 
+if(!is.na(Args[2])){output<-Args[2]}
 
-try(cutoff<-Args[4],silent = T)
-if(is.na(cutoff)){cutoff<-0.5}
 
-cat(paste0("The model is ",mode,". The input file is ",input));cat("\n")
-cat(paste0("The cutoff is ",cutoff));cat("\n")
+cat(paste0("The input file is ",input));cat("\n")
 
-if(mode == "Rice"){
-  xgb.load("Models/Rice_models/Rice_train_model")->modelA
-  load("Models/Rice_models/Zds_41.rds")
-  load("Models/Rice_models/Zss_41.rds")
-  load("Models/Rice_models/Features.RData")
-} else if(mode == "Fly"){
-  xgb.load("Models/Fly_models/Fly_train_model")->modelA
-  load("Models/Fly_models/Zds_41.rds")
-  load("Models/Fly_models/Zss_41.rds")
-  load("Models/Fly_models/Features.RData")
-} else if(mode == "Worm"){
-  xgb.load("Models/Worm_models/Worm_train_model")->modelA
-  load("Models/Worm_models/Zds_41.rds")
-  load("Models/Worm_models/Zss_41.rds")
-  load("Models/Worm_models/Features.RData")
-} else if(mode == "Human"){
-  xgb.load("Models/Human_models/Human_train_model")->modelA
-  load("Models/Human_models/Zds_41.rds")
-  load("Models/Human_models/Zss_41.rds")
-  load("Models/Human_models/Features.RData")
-} else if(mode =="Compre"){
-  xgb.load("Models/total_models/total_train_model")->modelA
-  load("Models/total_models/Zds_41.rds")
-  load("Models/total_models/Zss_41.rds")
-  load("Models/total_models/Features.RData")
-} else if(mode == "Compre2"){
-  xgb.load("Models/total_nr0.6_models/total_nr0.6_train_model")->modelA
-  load("Models/total_nr0.6_models/Zds_41.rds")
-  load("Models/total_nr0.6_models/Zss_41.rds")
-  load("Models/total_nr0.6_models/Features.RData")
-} else{
-  cat("Please input the right model you want to use")
-  stop()
-}
+
+xgb.load("total_models/total_train_model")->modelA
+load("total_models/Zds_41.rds")
+load("total_models/Zss_41.rds")
+load("total_models/Features.RData")
+
 
 #extract features
 Seq<-readDNAStringSet(input,format = "fasta",use.names = T)
@@ -106,7 +70,7 @@ Seq<-as.character(Seq)
 Bean<-makeBenneat(Seqs = Seq,labs = rep("test",length(Seq)))
 All_Feature<-data.frame(seq=names(Seq))
 
-physio<-read.csv("Models/feature_6_diprogb.csv",
+physio<-read.csv("feature_6_diprogb.csv",
                  row.names = 1,stringsAsFactors = F)
 PseKNC<-getT2PseKNC(object = Bean,phychem_file = physio,
                     normalization = T,lambda = 5)
@@ -136,7 +100,7 @@ dtest<-xgb.DMatrix(All_Feature%>% as.matrix())
 
 result$Score<-predict(modelA,dtest)
 result[result$Score>0.5,]$type<-"6mA";
-try(result[result$Score<0.5,]$type<-"non-6mA",silent=T)
+try(result[result$Score<0.5,]$type<-"non-6mA",silent = T)
 cat("\n")
 cat("The procedure has ended.");cat("\n")
 cat(paste0("There are ",length(Seq)," sequences. And ",sum(result$Score>0.5),
@@ -145,4 +109,3 @@ cat(paste0("The Positive Ratio is ",sum(result$Score>0.5)/length(Seq)))
 cat("\n")
 
 write.table(result,file=output)
-
