@@ -28,7 +28,7 @@ Rscript p6mA.R \[MODE\] \[INPUT FASTA FILE\] \[OUTPUT FILE NAME\] \[CUTOFF\]
         OUTPUT FILE NAME: The output file name. Default: Output.result
         
 
-        Attention: If you want to modify CUTOFF, please set the OUTPUT FILE NAME
+
 
 Example: 
 
