@@ -45,6 +45,12 @@ ATAGTGTAGTGAGCGTACGTAACGTGAAGTGAGTGAGTAGC
 
 The sequences in the file should be all 41bp length and the center posistions are always A.
 
+Users can also use the p6mA_loc.R script to directly predict variants' methylation status
+Rscript p6mA_loc.R test.loc
+
+test.loc is a file contained the coordinates in hg19.
+
+
 ####################################################################
 
 ## Note:
