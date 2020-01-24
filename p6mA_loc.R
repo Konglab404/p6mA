@@ -17,4 +17,4 @@ for(i in 1:length(seqs)){
 sink()
 
 
-system("Rscript p6mA.R temp.fasta")#In windows, change Rscript to Rscript.exe
+system("Rscript p6mA.R tmp.fasta")#In windows, change Rscript to Rscript.exe
